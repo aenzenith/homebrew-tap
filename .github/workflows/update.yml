@@ -1,0 +1,57 @@
+name: Update cask
+
+# Every hour, point Casks/pitwall.rb at the latest Pitwall release, once its
+# macOS disk image has finished uploading. Run it by hand from the Actions tab
+# right after a release.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-cask
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update Casks/pitwall.rb
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          release=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/aenzenith/pitwall/releases/latest)
+          version=$(jq -r '.tag_name | ltrimstr("v")' <<<"$release")
+          current=$(sed -nE 's/^  version "([^"]+)"$/\1/p' Casks/pitwall.rb)
+          if [ "$version" = "$current" ]; then
+            echo "Up to date: $current"
+            exit 0
+          fi
+
+          asset="Pitwall_${version}_aarch64.dmg"
+          url=$(jq -r --arg name "$asset" \
+            '.assets[] | select(.name == $name and .state == "uploaded") | .browser_download_url' <<<"$release")
+          if [ -z "$url" ]; then
+            echo "$asset is not uploaded yet; trying again next hour"
+            exit 0
+          fi
+
+          curl -fsSL -o pitwall.dmg "$url"
+          sha=$(sha256sum pitwall.dmg | cut -d' ' -f1)
+          rm pitwall.dmg
+          sed -i -E \
+            -e "s/^  version \"[^\"]+\"$/  version \"$version\"/" \
+            -e "s/^  sha256 \"[0-9a-f]+\"$/  sha256 \"$sha\"/" \
+            Casks/pitwall.rb
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "pitwall $version"
+          git push
