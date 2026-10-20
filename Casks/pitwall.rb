@@ -2,8 +2,7 @@ cask "pitwall" do
   version "1.12.3"
   sha256 "db15aac323d6a69d5e89d9aa73c21d476b741734a6e5fbda59c63cbe156f413b"
 
-  url "https://github.com/aenzenith/pitwall/releases/download/v#{version}/Pitwall_#{version}_aarch64.dmg",
-      verified: "github.com/aenzenith/pitwall/"
+  url "https://github.com/aenzenith/pitwall/releases/download/v#{version}/Pitwall_#{version}_aarch64.dmg"
   name "Pitwall"
   desc "Run dev servers and see when Claude Code is waiting, from the menu bar"
   homepage "https://pitwall.aenzenith.com/"
