@@ -1,6 +1,6 @@
 cask "pitwall" do
-  version "1.18.1"
-  sha256 "8634a8a5762f564c44dba2992b98fd3cd214fe64981eb7241544f54d3467a1f3"
+  version "1.18.2"
+  sha256 "07caf64bb20aa6fd1f24659044339dcc8653abf10546ab811455e7794b6be978"
 
   url "https://github.com/aenzenith/pitwall/releases/download/v#{version}/Pitwall_#{version}_aarch64.dmg"
   name "Pitwall"
