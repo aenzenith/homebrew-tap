@@ -11,9 +11,6 @@ brew install --cask aenzenith/tap/pitwall
 Apple Silicon, macOS 13 or later. Pitwall updates itself, so `brew upgrade` leaves it alone unless you
 pass `--greedy`.
 
-Builds aren't notarized yet. On macOS 15 and later the first open is blocked: open System Settings ›
-Privacy & Security, click Open Anyway within about an hour, then enter your password.
-
 To remove it, first take out what Pitwall added to Claude Code (Settings › Claude: the hook and the team
 radio) and the `pitwall` command (Settings › General), then:
 

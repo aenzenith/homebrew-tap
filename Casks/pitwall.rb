@@ -27,10 +27,4 @@ cask "pitwall" do
     "~/Library/Preferences/com.aenzenith.pitwall.plist",
     "~/Library/WebKit/com.aenzenith.pitwall",
   ]
-
-  caveats <<~EOS
-    Pitwall isn't notarized yet. On macOS 15 and later the first open is blocked:
-    open System Settings > Privacy & Security, click Open Anyway within about an
-    hour, then enter your password. You only do this once.
-  EOS
 end
